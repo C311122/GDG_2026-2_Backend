@@ -50,10 +50,8 @@ cd commerce
 ```
 
 ### 혹시 Spring 프로젝트로 인식을 못 할 경우
-```bash
-git clone https://github.com/phdcoco/2026-2-Backend-Practical-Study.git
-```
-1. IntelliJ에서 클론한 폴더를 연 상태에서
+
+1. IntelliJ에서 프로젝트 폴더를 연 상태에서
 2. commerce의 build.gradle을 우클릭하여 Link Gradle Project를 눌러주세요.
 3. 오른쪽 탭에 코끼리 모양이 떴다면 새로고침 표시를 눌러보세요.
 4. 그래도 안 된다면 프로젝트 내에 .idea 폴더를 전체 삭제한 뒤 다시 시도해보세요.
