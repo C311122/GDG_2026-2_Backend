@@ -12,14 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * 통합 테스트는 실제 DB나 와부 API 등과 연동하여 더 실무적인 관점에서 테스트합니다.
- * 단위 테스트보다 실행 속도가 느리고 에러의 원인 추적이 복잡할 수 있습니다.
- *
- * @SpringBootTest: 실제로 SpringBoot를 구동시켜 테스트를 진행해봅니다.
- * @ActiveProfiles: test 파일에서는 DataInitializer를 실행하지 않습니다.
- * @Transactional: 테스트가 끝나면 저장한 데이터를 되돌립니다. 테스트 데이터가 원본 데이터에 섞이지 않도록 합니다.
- */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional

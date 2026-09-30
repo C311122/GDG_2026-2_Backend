@@ -106,4 +106,60 @@ class OrderTest {
         assertThatThrownBy(() -> order.getOrderItems().clear())
                 .isInstanceOf(UnsupportedOperationException.class);
     }
+
+    // ---------------- 부분 취소 테스트 추가 ----------------
+
+    @Test
+    @DisplayName("주문 항목이 2개 이상일 때 하나를 부분 취소할 수 있다")
+    void 부분_취소_성공() {
+        // given: 2개의 항목을 가진 주문 생성
+        Order order = Order.place(keyboardItem);
+        order.addItem(mouseItem);
+
+        // when: 키보드 항목만 부분 취소
+        order.cancelItem(keyboardItem);
+
+        // then: 마우스 항목만 1개 남아야 함
+        assertThat(order.getOrderItems()).hasSize(1);
+        assertThat(order.getOrderItems()).containsOnly(mouseItem);
+    }
+
+    @Test
+    @DisplayName("주문 항목이 1개일 때 부분 취소하면 불변식 유지를 위해 예외가 발생한다")
+    void 부분_취소_실패_항목1개() {
+        // given: 1개의 항목만 가진 주문 생성
+        Order order = Order.place(keyboardItem);
+
+        // when & then: 유일한 항목을 지우려 하면 예외 발생
+        assertThatThrownBy(() -> order.cancelItem(keyboardItem))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("전체 주문 취소를 이용해주세요");
+    }
+
+    @Test
+    @DisplayName("배송이 시작된 주문은 부분 취소할 수 없다")
+    void 부분_취소_실패_배송시작() {
+        // given
+        Order order = Order.place(keyboardItem);
+        order.addItem(mouseItem);
+        order.ship(); // 배송 시작
+
+        // when & then
+        assertThatThrownBy(() -> order.cancelItem(mouseItem))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("배송이 시작된 주문은 부분 취소할 수 없습니다");
+    }
+
+    @Test
+    @DisplayName("해당 주문에 포함되지 않은 항목은 부분 취소할 수 없다")
+    void 부분_취소_실패_다른주문항목() {
+        // given: 키보드만 주문함
+        Order order = Order.place(keyboardItem);
+        order.addItem(OrderItem.create(3L, "마우스패드", Money.of(15_000L), Quantity.of(1)));
+
+        // when & then: 주문에 없는 mouseItem을 취소하려고 시도
+        assertThatThrownBy(() -> order.cancelItem(mouseItem))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("포함된 항목이 아닙니다");
+    }
 }

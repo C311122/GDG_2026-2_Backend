@@ -6,23 +6,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/**
- * 스프링을 띄우지 않고, Repository도 주입하지 않습니다.
- * 단위 테스트는 Java 코드 그 자체로 로직상의 결함이 없는지 테스트합니다.
- */
 class ProductTest {
 
     @Test
-    @DisplayName("재고를 정상적으로 감소시킨다")
-        // 메서드명은 한글로 해도 되고, 영어로 해도 됩니다.
-    void 재고를_정상적으로_감소시킨다() {
+    @DisplayName("Quantity 객체를 통해 상품 재고를 정상적으로 감소시킨다")
+    void 재고_감소_성공() {
         // given
-        Product product = new Product("기계식 키보드", 129_000L, 10);
+        Product product = new Product("기계식 키보드", 100000L, 10);
 
-        // when
-        product.decreaseStock(3);
+        // when - 이제 int 대신 Quantity 객체를 넘겨줍니다.
+        product.decreaseStock(Quantity.of(3));
 
-        // then, 10에서 3을 빼면 7이겠죠?
+        // then
         assertThat(product.getStock()).isEqualTo(7);
     }
 
@@ -32,8 +27,8 @@ class ProductTest {
         // given
         Product product = new Product("기계식 키보드", 129_000L, 10);
 
-        // when & then, 상품을 0개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
-        assertThatThrownBy(() -> product.decreaseStock(0))
+        // when & then, Quantity 객체 생성 시점에 이미 예외가 발생하여 Product까지 오지 않습니다.
+        assertThatThrownBy(() -> product.decreaseStock(Quantity.of(0)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("수량은 1개 이상이어야 합니다.");
     }
@@ -44,8 +39,8 @@ class ProductTest {
         // given
         Product product = new Product("무선 마우스", 45_000L, 3);
 
-        // when & then, 재고가 3개인 상품을 4개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
-        assertThatThrownBy(() -> product.decreaseStock(4))
+        // when & then
+        assertThatThrownBy(() -> product.decreaseStock(Quantity.of(4)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("재고가 부족합니다");
     }
@@ -57,8 +52,8 @@ class ProductTest {
         Product product = new Product("단종된 USB 허브", 25_000L, 5);
         product.stopSelling();
 
-        // when & then, 상태가 STOPPED인 상품을 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
-        assertThatThrownBy(() -> product.decreaseStock(1))
+        // when & then
+        assertThatThrownBy(() -> product.decreaseStock(Quantity.of(1)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("판매 중인 상품이 아닙니다.");
     }
@@ -70,9 +65,9 @@ class ProductTest {
         Product product = new Product("한정판 마우스패드", 19_000L, 1);
 
         // when
-        product.decreaseStock(1);
+        product.decreaseStock(Quantity.of(1));
 
-        // then, 재고가 1개뿐인 상품을 1개 구매할 때 재고가 0이 되고 SOLD_OUT 상태로 적절히 변경하는지 확인합니다.
+        // then
         assertThat(product.getStock()).isZero();
         assertThat(product.getStatus()).isEqualTo(SellingStatus.SOLD_OUT);
     }
