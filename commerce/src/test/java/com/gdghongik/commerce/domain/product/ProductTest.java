@@ -6,16 +6,16 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+
 /**
  * 스프링을 띄우지 않고, Repository도 주입하지 않습니다.
  * 단위 테스트는 Java 코드 그 자체로 로직상의 결함이 없는지 테스트합니다.
- * Quantity VO를 받기 때문에, 테스트 코드의 when 절에서도 of 메서드를 이용하여 리팩터링 해 줍니다.
  */
 class ProductTest {
 
     @Test
     @DisplayName("재고를 정상적으로 감소시킨다")
-        // 메서드명은 한글로 해도 되고, 영어로 해도 됩니다.
+    // 메서드명은 한글로 해도 되고, 영어로 해도 됩니다.
     void 재고를_정상적으로_감소시킨다() {
         // given
         Product product = new Product("기계식 키보드", 129_000L, 10);
@@ -33,7 +33,7 @@ class ProductTest {
         // given
         Product product = new Product("기계식 키보드", 129_000L, 10);
 
-        // when & then, 상품을 0개 사려고 시도할 때 Quantity 생성이 막히는 지 검사합니다.
+        // when & then, 상품을 0개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> product.decreaseStock(Quantity.of(0)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("수량은 1개 이상이어야 합니다.");

@@ -2,12 +2,15 @@ package com.gdghongik.commerce.application.order;
 
 import com.gdghongik.commerce.domain.order.Order;
 import com.gdghongik.commerce.domain.order.OrderRepository;
-import org.aspectj.weaver.ast.Or;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.*;
-
 public class FakeOrderRepository implements OrderRepository {
+
     private final Map<Long, Order> store = new HashMap<>();
     private long sequence = 0L;
 
