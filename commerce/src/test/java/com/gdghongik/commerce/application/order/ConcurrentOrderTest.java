@@ -33,8 +33,8 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(ConcurrentOrderTest.ConcurrentOrderTestConfiguration.class)
 class ConcurrentOrderTest {
 
-    private static final int INITIAL_STOCK = 10;
-    private static final int ORDER_COUNT = 2;
+    private static final int INITIAL_STOCK = 5;
+    private static final int ORDER_COUNT = 10;
 
     @Autowired
     private OrderService orderService;

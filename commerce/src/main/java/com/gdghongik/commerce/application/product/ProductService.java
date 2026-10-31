@@ -37,6 +37,6 @@ public class ProductService {
     public void decreaseStock(Long productId, int quantity) {
         Product product = findById(productId);
         product.decreaseStock(Quantity.of(quantity));
-        productRepository.save(product);
+        // productRepository.save(product);
     }
 }
