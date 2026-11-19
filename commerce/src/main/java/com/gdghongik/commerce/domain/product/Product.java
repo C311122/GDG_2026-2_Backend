@@ -18,7 +18,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO[W4-1]: 다른 트랜잭션이 이 상품을 먼저 변경했는지 감지할 수 있도록 버전 필드를 추가하세요.
     @Version
     private Long version;
 
