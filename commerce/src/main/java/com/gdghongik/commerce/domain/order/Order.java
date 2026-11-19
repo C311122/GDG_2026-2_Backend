@@ -24,7 +24,7 @@ public class Order {
     private OrderStatus status;
 
     // 실험: fetch = FetchType.EAGER를 추가하고 주문 목록 조회 테스트를 실행하세요. SQL 개수를 확인한 뒤 fetch = FetchType.LAZY로 되돌리세요.
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private Order(OrderStatus status) {
